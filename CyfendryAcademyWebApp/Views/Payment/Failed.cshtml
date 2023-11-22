@@ -1,0 +1,32 @@
+﻿<style>
+    .custom-heading {
+        font-family: Neue Montreal;
+        font-size: 60px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        background: var(--Cyfendry_nEw-Grad, linear-gradient(90deg, #008E73 1.84%, #333 27.58%, #732579 54.98%));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12 mt-5" style="text-align: center;">
+        <h3 class="custom-heading"><b>Payment Failed!</b></h3>
+        <svg xmlns="http://www.w3.org/2000/svg" width="226" height="24" viewBox="0 0 226 24" fill="none">
+            <path d="M3.21383 11.076C33.291 -0.496726 142.784 0.146056 209.587 16.7615M216.396 18.4845L222.911 21.2205" stroke="url(#paint0_linear_304_58)" stroke-width="5" stroke-linecap="round" />
+            <defs>
+                <linearGradient id="paint0_linear_304_58" x1="7.34228" y1="16.274" x2="123.877" y2="12.9443" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#008E73" />
+                    <stop offset="0.484375" stop-color="#333333" />
+                    <stop offset="1" stop-color="#732579" />
+                </linearGradient>
+            </defs>
+        </svg>
+        <p class="mt-2">Oops .. Payment gateway has rejected your request! Please try again with different card details ..</p>
+    </div>
+    <div class="col-md-12 mt-3">
+        <a href="/Account/Register" class="btn btn-primary">Try Again</a>
+    </div>
+</div>

@@ -1,0 +1,1351 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyfendry Academy Signature Upload</title>
+    @Styles.Render("~/Content/css")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <link href="~/Assets/Website/style.css" rel="stylesheet" />
+    @*<link async href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />*@
+
+<style>
+    body {
+        background-color: #F3F5FE;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    div {
+        background-color: white;
+    }
+
+    .active-step-name {
+        color: #732579;
+    }
+
+    .step-name {
+        color: black;
+    }
+
+    .custom-heading {
+        font-family: Neue Montreal;
+        font-size: 50px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        background: var(--Cyfendry_nEw-Grad, linear-gradient(90deg, #008E73 1.84%, #333 27.58%, #732579 54.98%));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .custom-signup-btn {
+        width: 100%;
+        border-radius: 25px;
+        background: #008E73;
+    }
+
+        .custom-signup-btn:hover {
+            width: 100%;
+            border-radius: 25px;
+            background: #477161E3;
+        }
+
+    .custom-proceed-btn {
+        width: 35%;
+        border-radius: 25px;
+        background: #008E73;
+        height: 100%;
+    }
+
+        .custom-proceed-btn:hover {
+            width: 35%;
+            border-radius: 25px;
+            background: #477161E3;
+            height: 100%;
+        }
+
+    .custom-card {
+        border-radius: 10px;
+        border: 5px solid #D9D9D9;
+        background: #FFF;
+    }
+
+    .custom-card-active {
+        border-radius: 10px;
+        border: 5px solid var(--Cyfendry_nEw-Grad, #008E73);
+        background: #FFF;
+    }
+
+    .custom-ques-inp {
+        max-width: 525px !important;
+    }
+    /*
+        .custom-reg-inp {
+            max-width: 400px !important;
+        } */
+
+    .radio {
+        margin: 0.5rem;
+    }
+
+        .radio input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+            .radio input[type="radio"] + .radio-label:before {
+                content: '';
+                background: #f4f4f4;
+                border-radius: 100%;
+                border: 1px solid #b4b4b4;
+                display: inline-block;
+                width: 1.4em;
+                height: 1.4em;
+                position: relative;
+                top: -0.2em;
+                margin-right: 1em;
+                vertical-align: top;
+                cursor: pointer;
+                text-align: center;
+                transition: all 250ms ease;
+            }
+
+            .radio input[type="radio"]:checked + .radio-label:before {
+                background-color: #3197ee;
+                box-shadow: inset 0 0 0 4px #f4f4f4;
+            }
+
+            .radio input[type="radio"]:focus + .radio-label:before {
+                outline: none;
+                border-color: #3197ee;
+            }
+
+            .radio input[type="radio"] + .radio-label:empty:before {
+                margin-right: 0;
+            }
+
+    .custom-radio-div {
+        height: 35px;
+        border-radius: 5px;
+        background: #F3F5FE;
+    }
+
+    .custom-hr {
+        position: relative;
+        top: 0px;
+        border: none;
+        height: 2px;
+        background: black;
+        margin-bottom: 10px;
+    }
+
+    .custom-plan-div {
+        height: 165px;
+        border-radius: 5px;
+        background: #F3F5FE;
+    }
+
+    .ques-align {
+        text-align: left;
+    }
+</style>
+</head>
+<body>
+    <div class="container-fluid Register-process-con p1">
+        <section class="container-fluid bgfff mb-2">
+            <div class="container">
+                <div class="row">
+                    @*<div class="col-md-12 pt-3">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img src="~/Assets/Website/Images/Logo.png" alt="Cyfendry" />
+                            </div>
+                            <div class="col-md-10">
+                                <div class="row mt-3">
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <img src="~/Assets/Website/Images/Register-Dot.png" width="35" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <h5 class="active-step-name">Registration</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <hr />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <img id="ques-img" src="~/Assets/Website/Images/InActiveRegister-Dot.png" width="30" />
+                                            </div>
+                                            <div class="col-md-7">
+                                                <h5 id="ques-heading" class="step-name">Questions</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <hr />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <img id="pay-img" src="~/Assets/Website/Images/InActiveRegister-Dot.png" width="30" />
+                                            </div>
+                                            <div class="col-md-7">
+                                                <h5 id="pay-heading" class="step-name">Payment</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <hr />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <img id="ag-img" src="~/Assets/Website/Images/InActiveRegister-Dot.png" width="30" />
+                                            </div>
+                                            <div class="col-md-7">
+                                                <h5 id="ag-heading" class="step-name">Agreement</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+
+                    <div class="col-md-2 ps-0 bgf3 ">
+                        <div class="bgfff py-1 pe-1">
+                            <img src="~/Assets/Website/Images/Logo.png" alt="Bootstrap" class="img-fluid headerlogo" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-10  bgf3">
+                        <div class="row h-100 bgfff justify-content-evenly">
+                            <div class="col-md-3">
+                                <div class="row pe-0 h-100 align-items-center">
+                                    <div class="col-md-2 ps-auto text-end pe-0">
+                                        <div class="rounded-circle" style="height: 25px; width: 25px; background-color: #732579; "></div>
+                                    </div>
+                                    <div class="col-md-10 d-flex align-items-center">
+                                        <h5 class="active-step-name mb-0">Registration</h5>
+                                        <div id="ques-hr" style="height: 3px; background-color: #732579; " class="horizontal-line  ms-1 mt-1 w-100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row h-100 align-items-center">
+                                    <div class="col-md-2 d-flex justify-content-end pe-0">
+                                        <div id="ques-dot" class="rounded-circle" style="height: 25px; width: 25px; background-color: #732579; "></div>
+                                    </div>
+                                    <div class="col-md-10 d-flex align-items-center">
+                                        <h5 id="ques-heading" class="active-step-name mb-0">Questions</h5>
+                                        <div id="pay-hr" style="height: 3px; background-color: #732579;" class="horizontal-line  ms-1 mt-1 w-100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row h-100 align-items-center">
+                                    <div class="col-md-2 d-flex justify-content-end pe-0">
+                                        <div id="pay-dot" class="rounded-circle" style="height: 25px; width: 25px; background-color: #732579;"></div>
+                                    </div>
+                                    <div class="col-md-10 d-flex align-items-center">
+                                        <h5 id="pay-heading" class="active-step-name mb-0">Payment</h5>
+                                        <div style="height: 3px; background-color: #732579;" class="horizontal-line  ms-1 mt-1 w-100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row h-100 align-items-center">
+                                    <div class="col-md-2 align-items-center">
+                                        <div class="rounded-circle" style="height: 25px; width: 25px; background-color: #732579;"></div>
+                                    </div>
+                                    <div class="col-md-10 d-flex align-items-center ">
+                                        <h5 id="ag-heading" class="active-step-name mb-0">Agreement</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        @{
+            long amt = 0;
+        }
+        <section id="register-sec" class="bgfff" hidden>
+            <div class="container">
+                <div class="row justify-content-between px-3 py-5">
+                    <div class="col-md-4">
+                        <h3 class="custom-heading"><b>Register</b></h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="226" height="24" viewBox="0 0 226 24" fill="none">
+                            <path d="M3.21383 11.076C33.291 -0.496726 142.784 0.146056 209.587 16.7615M216.396 18.4845L222.911 21.2205" stroke="url(#paint0_linear_304_58)" stroke-width="5" stroke-linecap="round" />
+                            <defs>
+                                <linearGradient id="paint0_linear_304_58" x1="7.34228" y1="16.274" x2="123.877" y2="12.9443" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#008E73" />
+                                    <stop offset="0.484375" stop-color="#333333" />
+                                    <stop offset="1" stop-color="#732579" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <p class="mt-3">Enter your details to get started.</p>
+                        <form class="w3-container px-0">
+                            <p>
+                                <input class="w3-input custom-reg-inp" type="text" id="firstName" placeholder="First Name" required>
+                            </p>
+                            <p>
+                                <input class="w3-input custom-reg-inp" type="text" id="lastName" placeholder="Last Name" required>
+                            </p>
+                            <p>
+                                <input class="w3-input custom-reg-inp" type="tel" id="phone" placeholder="Phone" required>
+                            </p>
+                            <p>
+                                <input class="w3-input custom-reg-inp" type="email" id="email" placeholder="Email Address" required>
+                            </p>
+                            <p>
+                                <input class="w3-input custom-reg-inp" type="password" id="password" placeholder="Password" required>
+                            </p>
+                            <p>
+                                <input class="w3-input custom-reg-inp" type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                            </p>
+                            <button id="sign-up-btn" type="button" onclick="signup()" class="btn btn-primary btn-lg custom-signup-btn shadow">Sign Up</button>
+                        </form>
+                    </div>
+                    <div class="col-md-8 px-1" id="course-row">
+                        <h3 class="px-0"><b>Courses</b></h3>
+                        @*<div class="row" id="course-row">
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="questions-sec" class="bgfff" hidden>
+            <div class="container">
+                <div class="row mx-2 py-3" style="text-align: center;">
+                    <div class="col-md-12 mt-4">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3 class="custom-heading"><b>Questions</b></h3>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="226" height="24" viewBox="0 0 226 24" fill="none">
+                                    <path d="M3.21383 11.076C33.291 -0.496726 142.784 0.146056 209.587 16.7615M216.396 18.4845L222.911 21.2205" stroke="url(#paint0_linear_304_58)" stroke-width="5" stroke-linecap="round" />
+                                    <defs>
+                                        <linearGradient id="paint0_linear_304_58" x1="7.34228" y1="16.274" x2="123.877" y2="12.9443" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#008E73" />
+                                            <stop offset="0.484375" stop-color="#333333" />
+                                            <stop offset="1" stop-color="#732579" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row mt-4  justify-content-center">
+                                <div class="col-md-8  question-dot-col ">
+                                    <div class="question-dot rounded-circle primary bg-prpl"></div>
+                                    <div id="cne-hr" style="height: 3px; background-color: #D9D9D9;" class="horizontal-line  w-100"></div>
+                                    <div id="cne-dot" class="question-dot rounded-circle bg-w"></div>
+                                    <div id="pmng-hr" style="height: 3px ;background-color: #D9D9D9;" class="horizontal-line  w-100"></div>
+                                    @*<div style="height: 3px ;background-color: #732579;" class="horizontal-line  w-100"></div>*@
+                                    <div id="pmng-dot" class="question-dot rounded-circle bg-w"></div>
+                                    @*<div class="question-dot rounded-circle bg-prpl"></div>*@
+                                </div>
+                            </div>
+
+                            @*<div class="row mt-4">
+                                <div class="col-md-4">
+                                    <img src="~/Assets/Website/Images/Question-Dot.png" width="35" />
+                                    <h4><b>Background and Experience:</b></h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <img id="cne-img" src="~/Assets/Website/Images/InActiveRegister-Dot.png" width="35" />
+                                    <h4 id="cne-heading">Commitment and Engagement:</h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <img id="pmng-img" src="~/Assets/Website/Images/InActiveRegister-Dot.png" width="35" />
+                                    <h4 id="pmng-heading">Personal Motivation and Goals:</h4>
+                                </div>
+                            </div>*@
+
+                            <div class="row mt-4">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-4 text-start">
+                                                <h5 class="fw-bold">Background and Experience:</h5>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <h5 id="cne-heading">Commitment and Engagement:</h5>
+                                            </div>
+                                            <div class="col-md-4 text-end">
+                                                <h5 id="pmng-heading">Personal Motivation and Goals:</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form class="w3-container container mt-3 pt-5 pb-4">
+                                <section id="q1">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-5  d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Previous Courses:</b> Have you taken any related courses or workshops in this subject area before? If so, please list them.</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans1" placeholder="Your Answer" required>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-5 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Technical Skills:</b> Rate your proficiency in [specific tools/software/techniques relevant to the course] </p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans2" placeholder="On a scale of 1 to 10." required>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-5 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Relevant Experience:</b> Describe any professional or personal experience you have that's related to the course content.</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans3" placeholder="Your Answer" required>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-5 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Expectations:</b> What do you hope to gain or achieve by the end of this course?</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans4" placeholder="Your Answer" required>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section id="q2" hidden>
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-5  d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Time Commitment:</b> How much time per week are you able to dedicate to this course outside of scheduled sessions?</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans5" placeholder="Your Answer" required>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-5 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Participation:</b> How would you rate the importance of active participation in class discussions on a scale of 1 to 10?</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans6" placeholder="On a scale of 1 to 10." required>
+                                            </p>
+                                            <span id="ans6-validation" style="color:red;" hidden></span>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-5 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Group Work:</b> Are you comfortable with group work and collaborating with peers online?</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans7" placeholder="Your Answer" required>
+                                            </p>
+                                            <span id="ans7-validation" style="color:red;" hidden></span>
+                                        </div>
+                                        <div class="col-md-5 d-flex flex-column justify-content-between">
+                                            <p class="ques-align" id="duration-para"></p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans8" placeholder="Your Answer" required>
+                                            </p>
+                                            <span id="ans8-validation" style="color:red;" hidden></span>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section id="q3" hidden>
+                                    <div class="row">
+                                        <div class="col-md-6 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Motivation:</b> What motivates you to enroll in this course?</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans9" placeholder="Your Answer" required>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Challenges:</b> Are there any challenges or obstacles you foresee that might affect your progress in this course? How do you plan to address them?</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans10" placeholder="Your Answer" required>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-6 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Future Plans:</b> How do you plan to apply the knowledge and skills you gain from this course in your future endeavors?</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans11" placeholder="Your Answer" required>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Referral:</b> How did you hear about Cyfendry Academy and this specific course?</p>
+                                            <p>
+                                                <input class="w3-input custom-ques-inp" type="text" id="ans12" placeholder="Your Answer" required>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center py-3  my-3">
+                                        <div class="col-md-5 d-flex flex-column justify-content-between">
+                                            <p class="ques-align"><b>Educational Background:</b> What is your level of education?</p>
+                                            <p>
+                                                @*<input class="w3-input custom-ques-inp ms-0offset-md-3" type="text" id="ans13" placeholder="Your Answer" required>*@
+                                                <select class="w3-input custom-ques-inp">
+                                                    <option>GED</option>
+                                                    <option>High School Diploma</option>
+                                                    <option>Bachelor Degree</option>
+                                                    <option>Masters</option>
+                                                    <option>Phd</option>
+                                                    <option>None</option>
+                                                </select>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="row my-3">
+                                    <div class="col justify-content-center">
+                                        <button type="button" onclick="proceed()" class="btn primary primaryText px-4 rounded-5 shadow-lg py-2 text-light  hero-btn">Proceed</button>
+                                        <button type="button" onclick="goBack()" class="btn btn-link  mx-1" style="color:black;background-color: transparent;">Back</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="payment-sec" class="bgfff" hidden>
+            <div class="container py-4">
+                <div class="row pb-2 justify-content-center">
+                    <div class="col-md-12 mt-4">
+                        <h3 class="custom-heading"><b>Payment</b></h3>
+                        @*<hr class="custom-hr" style="width: 50%"/>*@
+                        <svg xmlns="http://www.w3.org/2000/svg" width="226" height="24" viewBox="0 0 226 24" fill="none">
+                            <path d="M3.21383 11.076C33.291 -0.496726 142.784 0.146056 209.587 16.7615M216.396 18.4845L222.911 21.2205" stroke="url(#paint0_linear_304_58)" stroke-width="5" stroke-linecap="round" />
+                            <defs>
+                                <linearGradient id="paint0_linear_304_58" x1="7.34228" y1="16.274" x2="123.877" y2="12.9443" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#008E73" />
+                                    <stop offset="0.484375" stop-color="#333333" />
+                                    <stop offset="1" stop-color="#732579" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+                <div class="row justify-content-between py-3">
+                    <div class="col-md-5">
+                        <div class="row">
+                            @*<div class="col-md-12">
+                                <h3>Course Details</h3>
+                            </div>*@
+                            <div class="col-md-12">
+                                @*<div class="card float-right">
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <img id="crs-img" class="d-block w-100" src="" alt="">
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <div class="card-block">
+                                                <span class="badge bg-primary w-25">IT</span>
+                                                <h1 id="crs-name"></h1>
+                                                <p id="crs-desc"></p>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                                <div class="card d-flex flex-row">
+                                    <div style="width: 40%;">
+                                        <img id="crs-img" src="" class="img-fluid" alt="...">
+                                    </div>
+                                    <div class="card-body bgwf d-flex flex-column justify-content-between">
+                                        <div class="d-flex bgwf align-items-center justify-content-between">
+                                            <button style="font-size: smaller;  background: #4E5ACB; color: #fff;" class="px-3  py-1 course-row-btn rounded-pill border-0 ">Cybersecurity</button>
+                                            <span class="card-title fw-bold mb-0 ">
+                                                <i class="bi bi-x-lg"></i>
+                                            </span>
+                                        </div>
+                                        <p class="card-text fw-bold my-1" id="crs-name">Private: IAM Engineer Course</p>
+                                        <div class="d-flex bgwf align-items-center justify-content-between">
+                                            <span class="card-title fw-bold mb-0 " id="crs-amt"></span>
+                                            <span class=" mb-0  " style="font-size: smaller;">Qty:1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3><b>Payment Plan</b></h3>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="float-end" id="pay-amt" style="color: #008E73;"></h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <form id="payment-check">
+                                <div class="col-md-12 radio">
+                                    <div class="custom-radio-div">
+                                        <input type="radio" id="fullpayment" checked name="paymenttype" value="0">
+                                        <label class="radio-label mt-2" for="fullpayment">Pay in Full</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 radio">
+                                    <div class="custom-radio-div">
+                                        <input type="radio" id="paymentplan" name="paymenttype" value="1">
+                                        <label class="radio-label mt-2" for="paymentplan">Pay with Payment Plans</label>
+                                    </div>
+                                </div>
+                            </form>
+                            @*<div class="col-md-12"></div>*@
+                        </div>
+                        <div class="row" id="plans" hidden>
+                            <div class="col-md-4 radio">
+                                <div class="custom-plan-div">
+                                    <input type="radio" id="plan1" checked name="2week" value="0">
+                                    <label class="radio-label mt-2" for="plan1">Pay in 2 weeks</label>
+                                    <p>Upfront Payment: $1650</p>
+                                    <p>Weekly Payment: $555</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 radio">
+                                <div class="custom-plan-div">
+                                    <input type="radio" id="plan1" checked name="2week" value="0">
+                                    <label class="radio-label mt-2" for="plan1">Pay in 3 weeks</label>
+                                    <p>Upfront Payment: $1650</p>
+                                    <p>Weekly Payment: $555</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 radio">
+                                <div class="custom-plan-div">
+                                    <input type="radio" id="plan1" checked name="2week" value="0">
+                                    <label class="radio-label mt-2" for="plan1">Pay in 4 weeks</label>
+                                    <p>Upfront Payment: $1650</p>
+                                    <p>Weekly Payment: $555</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Card Details</h3>
+                            </div>
+                            <div class="col-md-12">
+                                <img src="~/Assets/Website/Images/card-front.svg" />
+                            </div>
+                            <div class="col-md-12">
+                                <a id="pay-btn" class="btn btn-primary btn-lg custom-signup-btn" href="/Payment/GoToPaymentCheckout">Go to Payment</a>
+                                <a id="sub-btn" class="btn btn-primary btn-lg custom-signup-btn" href="/Payment/GoToSubscriptionCheckout" hidden>Go to Subscription</a>
+                                @*<form class="w3-container" id="payment-form">
+                                    <p>
+                                        <input class="w3-input" type="text" id="cardnum" name="CardNumber" placeholder="0000 0000 0000 0000" required>
+                                        <label id="cn-valid" style="color:red;" hidden></label>
+                                    </p>
+                                    <p>
+                                        <input class="w3-input" type="text" id="mexp" name="ExpMonth" placeholder="MM" required>
+                                        <label id="em-valid" style="color:red;" hidden></label>
+                                    </p>
+                                    <p>
+                                        <input class="w3-input" type="text" id="yexp" name="ExpYear" placeholder="YYYY" required>
+                                        <label id="ey-valid" style="color:red;" hidden></label>
+                                    </p>
+                                    <p>
+                                        <input class="w3-input" type="text" id="cvv" name="Cvc" placeholder="CVV/CVC" required>
+                                        <label id="cvc-valid" style="color:red;" hidden></label>
+                                    </p>
+                                    <button type="button" id="payment-btn" class="btn btn-primary btn-lg custom-signup-btn shadow">Pay Now</button>
+                                </form>*@
+                                @*<form action="/Payment/Charge" method="POST">
+                                    <article>
+                                        <label id="str-amt-lbl">Amount: $5.00</label>
+                                    </article>
+                                    <input name="userCourseId" value="0" hidden />
+                                    <input name="coursePlanId" value="0" hidden />
+                                    <input name="isFullPayment" value="true" hidden />
+                                    <script src="//checkout.stripe.com/v2/checkout.js"
+                                            class="stripe-button"
+                                            data-key="pk_test_51O5RF5F2CKNCk6PLx3zWqOaRTyuwoeIzOM6TTjFpgxmwwxQF7e5xHbUw8QIdgEGcocHls5kBjvkLk83hL5zIX3JL00En5Rc3xj"
+                                            data-locale="auto"
+                                            data-description="Sample Charge"
+                                            >
+                                    </script>
+                                </form>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="agreement-sec" class="bgfff">
+            <div class="row" style="text-align: center;">
+                <div class="col-md-12 mt-4">
+                    <h3 class="custom-heading"><b>Agreement</b></h3>
+                    @*<hr class="custom-hr" style="width: 50%"/>*@
+                    <svg xmlns="http://www.w3.org/2000/svg" width="226" height="24" viewBox="0 0 226 24" fill="none">
+                        <path d="M3.21383 11.076C33.291 -0.496726 142.784 0.146056 209.587 16.7615M216.396 18.4845L222.911 21.2205" stroke="url(#paint0_linear_304_58)" stroke-width="5" stroke-linecap="round" />
+                        <defs>
+                            <linearGradient id="paint_linear_304_58" x1="7.34228" y1="16.274" x2="123.877" y2="12.9443" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#008E73" />
+                                <stop offset="0.484375" stop-color="#333333" />
+                                <stop offset="1" stop-color="#732579" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+            <hr class="custom-hr mb-0">
+            <div class="row" style="height:500px; overflow-y:scroll;">
+                <div class="col-md-12" style="text-align: center;">
+                    <span>Effective Date: January 1st, 2023</span>
+                </div>
+                <div class="col-md-12" style="text-align: center;">
+                    <h3>STUDENT ENROLLMENT AGREEMENT</h3>
+                </div>
+                <div class="col-md-12" style="text-align: center;">
+                    <p><u>STATEMENT OF AGREEMENT</u></p>
+                </div>
+                <div class="col-md-12">
+                    <h5><u>Tution:</u></h5>
+                </div>
+                <div class="col-md-12">
+                    <p>To ensure uninterrupted access to our program and its services, please make sure to settle the total cost before the class end date. Failure to clear any outstanding balance will result in the removal of access and the suspension of assistance with your resume, LinkedIn profile, and interview preparation.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>Payment options include:</p>
+                    <ul>
+                        <li>Pay in Full: The entire amount is due upon registration.</li>
+                        <li>Payment Plan: Select a suitable payment plan from the options available on our website and follow the payment schedule accordingly.</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <p>Please adhere to the terms of the chosen payment agreement, ensuring that all payments are completed by the end of the payment plan or within four weeks from the class start date.</p>
+                </div>
+                <div class="col-md-12">
+                    <h5><u>Cancellation And Refund Policy:</u></h5>
+                </div>
+                <div class="col-md-12">
+                    <p>If for any reason the student is not accepted by the school or the student wish to cancel, the applicant is entitled to a refund of all monies paid.</p>
+                </div>
+                <div class="col-md-12">
+                    <h5><u>Three-Day Cancellation:</u></h5>
+                </div>
+                <div class="col-md-12">
+                    <p>An applicant is entitled to a full refund of all monies paid if they submit a written notice of cancellation within three days of signing the enrollment agreement, and at least 72 hours before the course start date. <b>Refunds are not available once the course has commenced.</b></p>
+                </div>
+                <div class="col-md-12">
+                    <p>The school is required to issue a 100% refund no later than 30 days after receiving the cancellation notice.</p>
+                </div>
+                <div class="col-md-12">
+                    <h5><u>The Student Understands:</u></h5>
+                </div>
+                <div class="col-md-12">
+                    <ul>
+                        <li>Cyfendry Academy <b>does not guarantee job placement</b> to graduates upon program/course completion or upon graduation.</li>
+                        <li>Cyfendry Academy <b>will not search for jobs</b> for graduates upon program/course completion or upon graduation.</li>
+                        <li>Cyfendry Academy <b>will not perform interviews</b> for graduates upon program/course completion or upon graduation.</li>
+                        <li>Cyfendry Academy reserves the right to reschedule class due to low participation and attendance issues.</li>
+                        <li>Cyfendry Academy reserves the right to discontinue the student’s training for unsatisfactory progress, lack of attendance (two occurrences), nonpayment of tuition or failure to abide by School rules</li>
+                        <li>This document does not constitute a binding agreement until accepted in writing by all parties.</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <p><u>STATEMENT OF AGREEMENT</u></p>
+                </div>
+                <div class="col-md-12">
+                    By signing below, all participants of CYFENDRY ACADEMY Cohorts understand and agree to the following:
+                </div>
+                <div class="col-md-12">
+                    <ul>
+                        <li>I understand that the school may terminate my enrollment if I fail to comply with attendance, academic and financial requirement or if I disrupt the normal activities of the school. While enrolled in the school. I understand that I must maintain Satisfactory Academic Progress as described in the school catalog and that my financial obligation to the school must be paid in full before a certificate may be awarded.</li>
+                        <li>I also understand that this institution does not guarantee job placement to graduates upon program/course completion or upon graduation.</li>
+                        <li>I will always conduct myself in a professional and ethical manner, which includes following through on all course schedules that I have accepted and exhibiting professional behavior.</li>
+                        <li>If I am unable to attend a scheduled class, I will notify my course instructor at least 6 hours prior.</li>
+                        <li>I understand that a no-show for a class with no prior notice can jeopardize my student privileges and I will not be entitled to a refund for any no show class.</li>
+                        <li>I understand that it is my responsibility to provide accurate and honest information in all dealings with CYFENDRY ACADEMY including information that is reflected on my registration documents or addressed during the onboarding process.</li>
+                        <li>I understand that accepting to participate in this program is a commitment to complete the course barring any emergency circumstances.</li>
+                        <li>I will adhere to all the ethical, academic, and professional expectations established by CYFENDRY ACADEMY.</li>
+                        <li>I agree to notify CYFENDRY ACADEMY of any circumstances that will prevent completion of my course.</li>
+                        <li>I understand that the instructors of my CYFENDRY ACADEMY courses will be notified of any infractions to the above which may result in suspension of my course privileges.</li>
+                        <li>I am aware that attendance will be taken during every training session. As a student it is my responsibility to give prior notice of any missed class and schedule a make-up class.</li>
+                        <li>I understand that if more than 3 training sessions are missed (with or without notice), my performance will be flagged and marked on my student record.</li>
+                        <li>I agree to complete the various projects assigned to me during this program. All incomplete projects will stand as an indication of negative performance and be flagged by my instructor.</li>
+                        <li>I agree to reach out to CYFENDRY ACADEMY admin with any complaints concerning my course or course instructor in a timely manner.</li>
+                        <li>I am aware that CYFENDRY ACADEMY does not guarantee any form of employment upon completion of this program. The primary goal is to equip students with the skills and knowledge they will need to find gainful employment in the tech industry.</li>
+                        <li>I understand that all student interview prep and job search tips will not start until 1 week to the end of the lecture.</li>
+                        <li>I understand that the course tuition fee is non-refundable after the start date. However, if the student files a dispute for the course fee and the chargeback case is found in favor of the cardholder, then the amount of the course fee will be returned to the original payment method. However, if the case is found in favor of CYFENDRY. The course fee will be returned to CYFENDRY’s bank account, and the student will lose access to their CYFENDRY ACADEMY online learning platform and other associated services.</li>
+                        <li>I acknowledge that my course instructor is not responsible for any make-up work for their students outside of emergency work.</li>
+                        <li>I have read and accepted all terms.</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <p><u>STATEMENT OF AGREEMENT</u></p>
+                </div>
+                <div class="col-md-12">
+                    <p>I, the undersigned, hereby acknowledge that I have read, understood, and received a copy of this agreement. I further recognize and agree that this agreement supersedes all prior or contemporaneous verbal or written agreements and can only be modified with the mutual written consent of both the student and the institution. In the event of defaulting on this agreement, I understand and accept that I will be responsible for the payment of any collection fees or additional charges incurred by Cyfendry Academy.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>By signing below, I affirm that I have comprehensively reviewed and understood all aspects of this agreement, and I fully recognize my legal obligations concerning this enrollment agreement.</p>
+                </div>
+                <div class="col-md-12" style="text-align: center;">
+                    <h3>Testimonial Release</h3>
+                </div>
+                <div class="col-md-12" style="text-align: center;">
+                    <span>Effective Date: January 1st, 2023</span>
+                </div>
+                <div class="col-md-12">
+                    <p>The party listed above will refer to themselves throughout this document as "the Releasor," "I," and through the use of other first-person pronouns.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>I, the Releasor, hereby and irrevocably consent to the use, publication, distribution, broadcasting, reproduction, editing, recording, posting, copyrighting, licensing, digitization, and/or re-release of the Released Testimonial, as defined below, by the following company, as well as any employees, affiliates, associates, representatives, or agents (collectively referred to as the "Release Receiver") for any legal reason or purpose, including but not limited to social media, commercial products, education, course materials, video footage, sales, marketing, or any other medium in any form that has been or will be invented:</p>
+                </div>
+                <div class="col-md-12">
+                    <p>Cyfendry Consulting, a limited liability company, organized under the laws of the state of Texas, having its principal place of business at the following address:</p>
+                </div>
+                <div class="col-md-12">
+                    <p>5465 Legacy Drive</p>
+                    <p>Plano, TX 75024</p>
+                </div>
+                <div class="col-md-12">
+                    <p>I agree that this consent is realized and enforceable as of the Effective Date listed at the head of this document.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>The Released Testimonial was made by the Releasor on the following date: December 28th, 2021.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>I shall not sue the Release Receiver, nor bring any action against the Release Receiver regarding the Release Testimonial. I hereby release the Release Receiver from any and all claims and demands arising out of or in connection with any use of the Released Testimonial, including, without limitation, claims for privacy violations, right of publicity claims, defamation and/or any other intellectual property rights. I claim no ownership of the Released Testimonial and forego any opportunity, whether past or present, to copyright or trademark the Released Testimonial.</p>
+                    <p>I give consent to the use of this Released Testimonial while knowing and understanding that my name, comments, and other identifying factors may be revealed to the general public. However, the Release Receiver may not make known to any party in any medium my known or previously known location, email or physical address, or any other contact details, such as my phone number.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>I represent and warrant to the Release Receiver that I have the power and authority to authorize this Testimonial Release and that the Released Testimonial will not violate the intellectual property rights of any third party.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>I indemnify and hold the Release Receiver harmless from any damage or cost, which may include reasonable attorneys' fees, arising from or in connection with the use of the Released Testimonial.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>This Testimonial Release represents the entire understanding between the parties listed above and supersedes all previous representations, understandings or agreement. No waiver, modification or cancellation of any term or condition of this Testimonial Release shall be effective unless signed in writing by both parties.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>This Testimonial Release shall be governed by the laws of Texas. If any part of this Testimonial Release is found to be invalid, the remainder of the Testimonial Release shall remain in full force and effect to the maximum extent permitted by law.</p>
+                </div>
+                <div class="col-md-12">
+                    <p>I am over eighteen years of age and have full legal rights and authority to consent to the terms of this Testimonial Release.</p>
+                </div>
+                <div class="col-md-12" style="text-align:center;">
+                    <h3>STUDENT NON-DISCLOSURE AGREEMENT</h3>
+                </div>
+                <div class="col-md-12">
+                    <p id="ndas"></p>
+                </div>
+                <div class="col-md-12">
+                    <p>Company and Student hereby agree as follows:</p>
+                </div>
+                <div class="col-md-12">
+                    <ol>
+                        <li>"Confidential Information" means proprietary and confidential information of Company marked or identified as such.</li>
+                        <li>No information will be Confidential Information that: (i) is already known to Student, or (ii) is or becomes publicly known through no wrongful act of Student, or (iii) is received by Student from a third party without similar restrictions and without breach of this Agreement.</li>
+                        <li>Except as provided herein, Student will not disclose any Confidential Information to any other person. Student will not use any Confidential Information other than in connection with the Project.</li>
+                        <li>Student may disclose Confidential Information (i) to other students who have executed non-disclosure agreements with Company, (ii) in response to the lawful request or requirement of a governmental agency or by requirement of law, and (iii) to the faculty member supervising the Project if faculty member has signed a non-disclosure agreement with Company.</li>
+                        <li>All Information (CYFENDRY provided materials and resources) delivered by Company to Student will be and remain property of Company. All Information, and any copies thereof, will be promptly returned to Company or destroyed by Student upon Company's request.</li>
+                        <li>Students must not distribute, communicate, or copy company information, including course materials and resources, to third parties who have yet to sign an NDA.</li>
+                        <li>This Agreement may not be modified except by written instrument signed on behalf of each party. Either party may assign this Agreement to a parent corporation, to a wholly owned subsidiary or a successor of substantially all of the business or assets of the party. This Agreement embodies the entire agreement and understanding of the parties and terminates and supersedes all prior independent agreements and under takings between the parties. The provisions of this Agreement shall be construed in accordance with the laws of the state of Texas. All notices, requests or consents given in connection with this Agreement shall be given in writing and sent by first class mail, postage prepaid, telegram, teletype, telex, cable or email to the addresses listed at the end of this Agreement, unless either party notifies the other party of a different address.</li>
+                    </ol>
+                </div>
+                <div class="col-md-12">
+                    <h5>Description of Service:</h5>
+                </div>
+                <div class="col-md-12">
+                    <p>Any course taken from Cyfendry, associated documents, information regarding interview process, resume, LinkedIn tips, and any additional resources provided by Cyfendry Academy instructors and students.</p>
+                </div>
+                <div class="col-md-12">
+                    <h5>Instructors</h5>
+                    <p>Mary Balogun</p>
+                    <p>eMail: info@cyfendry.com</p>
+                    <p>Telephone: (945)-248-8808</p>
+                    <p>Website: www.cyfendryacademy.com</p>
+                </div>
+                <div class="col-md-12">
+                    <h5>Program Coordinator</h5>
+                    <p>Hilda Boateng</p>
+                    <p>eMail: support@cyfendry.com</p>
+                </div>
+                <div class="col-md-12">
+                    <h5>Class Location and Time</h5>
+                    <p>Location: Virtual/Online – via Zoom</p>
+                    <p>Time: Saturday 9:30 AM – 11:30 AM CST</p>
+                </div>
+                <div class="col-md-12">
+                    <h5>Course Description</h5>
+                    <p>In this course, you will learn how IT audits are planned, organized, and executed, and their results communicated to the organization. Students will learn how to develop and implement risk-based IT audits strategies and objectives in compliance with generally accepted audit standards to ensure that the organization’s IT assets are adequately controlled, monitored, and assessed, and are aligned with its business objectives.</p>
+                </div>
+                <div class="col-md-12">
+                    <h5>Course Objectives</h5>
+                    <ol>
+                        <li>Develop and implement a risk-based approach in compliance with IT audit standards ensuring that key areas of IT are included.</li>
+                        <li>Design specific audits to verify whether information systems are protected, controlled, and provide value to the organization.</li>
+                        <li>Obtain evidence that is sufficient, competent, relevant, and useful in achieving audit objectives.</li>
+                        <li>Analyze the information gathered to identify reportable conditions.</li>
+                        <li>Report the results of the audit to key stakeholders and make recommendations; effect change when necessary.</li>
+                        <li>Conduct follow-ups and prepare status reports to ensure that appropriate and timely actions have been taken by management.</li>
+                    </ol>
+                </div>
+                <div class="col-md-12">
+                    <h5>Required Text and Readings</h5>
+                    <p>Most of the reading material required for class will be provided to you, additional materials are available through ISACA, Audit Net and the IIA.</p>
+                    <ul>
+                        <li>Book - IT Auditing Using Controls to Protect Information Assets</li>
+                        <li>Articles - IT Audit & Cybersecurity Articles – mostly from the ISACA Journal and Gartner, Inc.</li>
+                        <li>Book - Cybersecurity Threats, Malware Trends, and Strategies: Learn to mitigate exploits, malware, phishing, and other social engineering attacks</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <h5>Evaluation and Grading</h5>
+                    <table>
+                        <tr>
+                            <th>Item</th>
+                            <th>Weight</th>
+                        </tr>
+                        <tr>
+                            <td>Participation (in class and online)</td>
+                            <td>30%</td>
+                        </tr>
+                        <tr>
+                            <td>Projects</td>
+                            <td>30%</td>
+                        </tr>
+                        <tr>
+                            <td>Quizzes</td>
+                            <td>20%</td>
+                        </tr>
+                        <tr>
+                            <td>Exams</td>
+                            <td>20%</td>
+                        </tr>
+                        <tr>
+                            <td>100%</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <h5>Weekly Cycle</h5>
+                    <ul>
+                        <li>You:	Read, view, etc. content for week</li>
+                        <li>Me:	Provide course materials and training</li>
+                        <li>You:	Respond to questions and read & respond to other’s answers</li>
+                        <li>Us:	Class (Saturday & Sunday)</li>
+                        <li>Me:	Post notes and summary (weekly)</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <h5>Additional Information</h5>
+                    <h5>Availability of Instructors</h5>
+                    <ul>
+                        <li>
+                            Please feel free to contact me via e-mail with any issues related to this class. We will also be available at the end of each session. Please note that these discussions are to address questions/concerns but are NOT for helping students catch up on content they missed because they were absent.
+                            Note: We will respond promptly when contacted during the week
+                        </li>
+                        <li>
+                            We are available to meet personally with you:
+                            ⇒   Immediately after class
+                            ⇒   By appointment prior to class
+                            ⇒   By appointment by phone
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <h5>Attendance Policy</h5>
+                    <ul>
+                        <li>Class discussion is intended to be an integral part of the course. Therefore, full attendance is expected by every student.</li>
+                        <li>If you are absent from class, speak with your classmates to catch up on what you have missed.</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <h5>Class Etiquette</h5>
+                    <ul>
+                        <li>Please be respectful of the class environment.</li>
+                        <li>Class starts promptly at the start time. Arrive on time and stay until the end of class.</li>
+                        <li>Turn off and put away cell phones, alarms during class.</li>
+                        <li>
+                            Limit the use of electronic devices (e.g., laptop, tablet computer) to class-related usage such as
+                            taking notes. Restrict the use of an internet connection (e.g., checking email, internet browsing,
+                            sending instant messages) to before class, during class breaks, or after class
+                        </li>
+                        <li>
+                            Refrain from personal discussions during class. Please leave the room if you need to speak to
+                            another student for more than a few words. If a student cannot refrain from engaging in private
+                            conversation and this becomes a pattern, the students will be asked to leave the classroom to
+                            allow the remainder of the students to work.
+                        </li>
+                        <li>
+                            During class time speak to the entire class (or breakout group) and let each person “take their
+                            turn.”
+                        </li>
+                        <li>Be fully present and remain present for the entirety of each class meeting.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mt-2" style="text-align:center;">
+                <div class="col-md-12">
+                    <form id="sign-upload-form" onsubmit="return false;" method="post" enctype="multipart/form-data">
+                        <input id="uci" hidden name="_userCourseId" value="" />
+                        <p>Upload your digital signature.</p>
+                        <input id="sign-upload-file" class="btn custom-proceed-btn" name="file" value="Upload digital signature" type="file" />
+                        <button id="sign-submit-btn" type="submit" class="btn custom-proceed-btn" disabled>Submit</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <hr />
+        <footer style="text-align:center;">
+            <p>&copy; @DateTime.Now.Year Cyfendry | All Rights Reserved</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>*@
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toaster/4.0.1/css/bootstrap-toaster.min.css" integrity="sha512-RLiJ5uLcu8jWxsJBevOZWLU0zWv51vwpha0Gh4jRKOqkcWbVR7+U8kKaiGsMhSua3fIkviCHRClSH+XZYKIoZA==" crossorigin="anonymous" referrerpolicy="no-referrer" />*@
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toaster/4.0.1/js/bootstrap-toaster.min.js" integrity="sha512-YmkrdAXo8RdHV1JFfepR7QWLDfF7vs8Mc/t+6qKIxrEFeWbi0u/lajryYSPK6GC5nupW5t6XfPdxQpIY79+USg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
+    @*<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>*@
+    @*@RenderSection("scripts", required: false)*@
+    <script>
+        let selectedCourseId = 0;
+        let selectedCourse = null;
+        let userCourseId = 0;
+        let coursePlanId = 0;
+        let isFullPayment = true;
+        let courses = null;
+        let quesSec = 1;
+        let studentName = null;
+
+        $(document).ready(function () {
+            //var stripe = Stripe('pk_test_51O5RF5F2CKNCk6PLx3zWqOaRTyuwoeIzOM6TTjFpgxmwwxQF7e5xHbUw8QIdgEGcocHls5kBjvkLk83hL5zIX3JL00En5Rc3xj');
+            //var elements = stripe.elements({
+            //    clientSecret: 'sk_test_51O5RF5F2CKNCk6PL5aSGWK8Xp76hbqjBRcG32oAzYiMRhn66YQtvqUl5rqNZROEFcPcLQTFb9EFWekfaYSFhqALD00gxBl7JmR',
+            //});
+            getCoursesData();
+
+            function getCoursesData() {
+                $.ajax({
+                    url: '/course/GetAllCourses',
+                    type: 'GET',
+                    success: (response) => {
+                        if (response.status) {
+                            courses = response.modelList;
+
+                            let tempHtml = ``;
+                            response.modelList.forEach(function (course) {
+                                tempHtml += `
+                                                                                            <div class="col-md-6 mt-1" onclick="selectCourse(this, ${course.Id})">
+                                                                                                <div class="card custom-card" style="width: 18rem;">
+                                                                                                    <img class="card-img-top" src="${course.ImagePath}" alt="${course.Name}" style="width:100%;">
+                                                                                                    <div class="card-body">
+                                                                                                    <div class="d-flex">
+                                                                                                        <h5><span class="badge bg-primary">IT Audit</span></h5>
+                                                                                                        <h5 class="card-title offset-6">$${course.Price}</h5>
+                                                                                                    </div>
+                                                                                                        <h4 class="card-title">${course.Name}</h4>
+
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        `;
+                            });
+
+                            $('#course-row').append(tempHtml);
+                        }
+                        else {
+                        }
+                    }
+                });
+            }
+
+            // agreement functions
+            $('#sign-upload-form').on('submit', function (e) {
+                $.ajax({
+                    url: '/Signature/Upload',
+                    type: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: (response) => {
+                        if (response.status) {
+                            window.location.href = '/account/registered'
+                        }
+                        else {
+                            responseErrorPopUp(response.userMessage);
+                        }
+                    },
+                    error: (error) => {
+                        serverErrorPopUp();
+                    }
+                });
+            })
+            $('#sign-upload-file').on('change', function () {
+                $('#sign-submit-btn').removeAttr('disabled');
+            })
+
+            // payment functions
+            $('#payment-check').change(function () {
+                selected_value = $("input[name='paymenttype']:checked").val();
+                if (selected_value == '1') {
+                    isFullPayment = false;
+                    $('input[name="isFullPayment"]').val(false);
+                    $('#plans').removeAttr('hidden');
+                }
+                else {
+                    isFullPayment = true;
+                    $('input[name="isFullPayment"]').val(true);
+                    $('#plans').attr('hidden', 'hidden');
+                }
+            });
+            function paymentFormValidation() {
+                if ($('#cardnum').val() == null || $('#cardnum').val()?.length != 16) {
+                    $('#cn-valid').text('Card number should be 16 digits!');
+                    $('#cn-valid').removeAttr('hidden');
+                    return false;
+                }
+                if ($('#mexp').val() == null || $('#mexp').val()?.length != 2) {
+                    $('#em-valid').text('Exp month should be of 2 digit!');
+                    $('#em-valid').removeAttr('hidden');
+                    return false;
+                }
+                if ($('#yexp').val() == null || $('#yexp').val()?.length != 4) {
+                    $('#ey-valid').text('Exp year should be of 4 digit!');
+                    $('#ey-valid').removeAttr('hidden');
+                    return false;
+                }
+                if ($('#cvv').val() == null) {
+                    $('#cvc-valid').text('Invalid cvc or cvv!');
+                    $('#cvc-valid').removeAttr('hidden');
+                    return false;
+                }
+                return true;
+            }
+            $('#payment-btn').on('click', function (e) {
+                if (paymentFormValidation()) {
+                    let data = {
+                        'UserCourseId': userCourseId,
+                        'CoursePlanId': coursePlanId,
+                        'CardNumber': $('#cardnum').val(),
+                        'ExpMonth': $('#mexp').val(),
+                        'ExpYear': $('#yexp').val(),
+                        'Cvc': $('#cvv').val(),
+                        'IsFullPayment': isFullPayment
+                    };
+                    $.ajax({
+                        url: '/Payment/CardPayment',
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        success: (response) => {
+                            if (response.status) {
+                                goToAgreementSection();
+                            }
+                            else {
+                                responseErrorPopUp(response.errorMessage);
+                            }
+                        },
+                        error: function (jqXhr, textStatus, errorThrown) {
+                            serverErrorPopUp();
+                        }
+                    });
+                }
+            });
+        });
+
+        function selectPlan(id) {
+            coursePlanId = id;
+            $('#sub-btn').attr('href', `/Payment/GoToSubscriptionCheckout?userCourseId=${userCourseId}&coursePlanId=${id}`);
+            $('input[name="coursePlanId"]').val(id);
+        }
+        function appendPaymentPlans() {
+            $('#plans').empty();
+            let htmlTemp = '';
+
+            selectedCourse.CoursePlans.forEach(function (coursePlan) {
+                htmlTemp += `
+                                                                <div class="col-md-4 radio">
+                                                                    <div class="custom-plan-div">
+                                                                        <input type="radio" onchange="selectPlan(${coursePlan.Id})" id="plan${coursePlan.Id}" name="plan${selectedCourseId}" value="${coursePlan.Id}">
+                                                                        <label class="radio-label mt-2" for="plan${coursePlan.Id}">Pay in ${coursePlan.IntervalValue} ${coursePlan.Interval}s</label>
+                                                                        <p class="mx-1">Upfront Payment: $${coursePlan.UpFrontPrice}</p>
+                                                                        <p class="mx-1">Weekly Payment: $${coursePlan.PlanPrice}</p>
+                                                                    </div>
+                                                                </div>
+                                                            `;
+            });
+            $('#plans').append(htmlTemp);
+        }
+        function goToAgreementSection() {
+            $('#payment-sec').attr('hidden', 'hidden');
+            $('#agreement-sec').removeAttr('hidden');
+            $('#ag-heading').removeClass('step-name');
+            $('#ag-heading').addClass('active-step-name');
+            $('#ag-img').attr('src', '/Assets/Website/Images/Register-Dot.png');
+        }
+        function goToPaymentSection() {
+            $('#questions-sec').attr('hidden', 'hidden');
+            $('#payment-sec').removeAttr('hidden');
+            $('#pay-heading').removeClass('step-name');
+            $('#pay-heading').addClass('active-step-name');
+            $('#pay-img').attr('src', '/Assets/Website/Images/Register-Dot.png');
+            $('#crs-img').attr('src', selectedCourse.ImagePath);
+            $('#crs-name').text(selectedCourse.Name);
+            $('#crs-desc').text(selectedCourse.Description.substring(0, 200));
+            $('#pay-amt').html('<b>$' + selectedCourse.Price + '</b>');
+            appendPaymentPlans();
+        }
+        function goBack() {
+            if (quesSec == 3) {
+                quesSec = 2;
+                $('#pmng-heading').html('Personal Motivation and Goals:');
+                $('#pmng-img').attr('src', '/Assets/Website/Images/InActiveRegister-Dot.png');
+                $('#q3').attr('hidden', 'hidden');
+                $('#q2').removeAttr('hidden');
+            }
+            else if (quesSec == 2) {
+                quesSec = 1;
+                $('#cne-heading').html('Commitment and Engagement:');
+                $('#cne-img').attr('src', '/Assets/Website/Images/InActiveRegister-Dot.png');
+                $('#q2').attr('hidden', 'hidden');
+                $('#q1').removeAttr('hidden');
+            }
+        }
+        function commitmentEngagementValidation() {
+            debugger;
+            if ($('#ans6').val() == null || $('#ans6').val() < 4) {
+                $('#ans6-validation').text('participation level should be greater than 3!');
+                $('#ans6-validation').removeAttr('hidden');
+                return false;
+            }
+            if ($('#ans7').val() == null || $('#ans7').val().toLowerCase() != 'yes') {
+                $('#ans7-validation').text('you should be comfortable in group work!');
+                $('#ans7-validation').removeAttr('hidden');
+                return false;
+            }
+            if ($('#ans8').val() == null || $('#ans8').val().toLowerCase() != 'yes') {
+                $('#ans8-validation').text('you should be comfortable in course duration!');
+                $('#ans8-validation').removeAttr('hidden');
+                return false;
+            }
+            return true;
+        }
+        function proceed() {
+            if (quesSec == 1) {
+                quesSec = 2;
+                $('#cne-heading').html('<b>Commitment and Engagement:</b>');
+                $('#cne-img').attr('src', '/Assets/Website/Images/Question-Dot.png');
+                $('#q1').attr('hidden', 'hidden');
+                $('#q2').removeAttr('hidden');
+            }
+            else if (quesSec == 2) {
+                if (commitmentEngagementValidation()) {
+                    quesSec = 3;
+                    $('#pmng-heading').html('<b>Personal Motivation and Goals:</b>');
+                    $('#pmng-img').attr('src', '/Assets/Website/Images/Question-Dot.png');
+                    $('#q2').attr('hidden', 'hidden');
+                    $('#q3').removeAttr('hidden');
+                }
+            }
+            else if (quesSec == 3) {
+                successPopUp();
+                goToPaymentSection();
+            }
+        }
+        function goToQuestionSection() {
+            $('#register-sec').attr('hidden', 'hidden');
+            $('#questions-sec').removeAttr('hidden');
+            $('#ques-heading').removeClass('step-name');
+            $('#ques-heading').addClass('active-step-name');
+            $('#ques-img').attr('src', '/Assets/Website/Images/Register-Dot.png');
+        }
+        function signup() {
+            $('#sign-up-btn').attr('disabled', 'disabled');
+            $('#ndas').text(`This Agreement is made and entered into by and between Cyfendry Consulting, LLC ("Company") and ${studentName} ("Student") for the purpose of receiving certain confidential information of Company to enable the Student to undertake the course described at the end of this Agreement ("course").`);
+            if ($('#password').val() == $('#confirmPassword').val()) {
+                if (selectedCourseId == 0) {
+                    $('#sign-up-btn').removeAttr('disabled');
+                    responseErrorPopUp('Select a course!');
+                    return false;
+                }
+                let data = {
+                    FirstName: $('#firstName').val(),
+                    LastName: $('#lastName').val(),
+                    Phone: $('#phone').val(),
+                    Email: $('#email').val(),
+                    Password: $('#password').val(),
+                    CourseId: selectedCourseId
+                }
+                $.ajax({
+                    url: '/account/register',
+                    type: 'POST',
+                    data: { registerRequestModel: data },
+                    success: (response) => {
+                        if (response.status) {
+                            //$('#register-sec').attr('hidden', 'hidden');
+                            //$('#questions-sec').removeAttr('hidden');
+                            $('#uci').val(response.model.Id);
+                            $('input[name="userCourseId"]').val(response.model.Id);
+                            userCourseId = response.model.Id;
+                            goToQuestionSection();
+                            studentName = $('#firstName').val() + ' ' + $('#lastName').val();
+                        }
+                        else {
+                            $('#sign-up-btn').removeAttr('disabled');
+                            responseErrorPopUp(response.userMessage);
+                        }
+                    },
+                    error: (err) => {
+                        $('#sign-up-btn').removeAttr('disabled');
+                        serverErrorPopUp();
+                    }
+                });
+            }
+            else {
+                $('#sign-up-btn').removeAttr('disabled');
+                responseErrorPopUp("Password does'nt match");
+            }
+        }
+        function selectCourse(e, id) {
+            selectedCourseId = id;
+            selectedCourse = courses.find(i => i.Id === id);
+            $('#duration-para').empty();
+            $('#duration-para').append('<b>Course Duration:</b> The course runs for ' + selectedCourse.Duration + '. Are you confident in your ability to commit for the entire duration?');
+            $('.custom-card-active').addClass("custom-card");
+            $('.custom-card').removeClass("custom-card-active");
+            $(e).children().removeClass("custom-card");
+            $(e).children().addClass("custom-card-active");
+            //console.log('selectedCourse: ', selectedCourse);
+        }
+        function successPopUp() {
+            Swal.fire({
+                //position: "top-end",
+                icon: "success",
+                title: "Accepted",
+                //showConfirmButton: false,
+                timer: 1500
+            });
+        }
+        function responseErrorPopUp(message) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: message
+            });
+        }
+        function serverErrorPopUp() {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong! Please try again later .."
+            });
+        }
+    </script>
+</body>
+</html>

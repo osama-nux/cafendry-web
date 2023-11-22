@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e2a954683774427c9ff464878f0c8e26" Name="Diagram1">
+        <EntityTypeShape EntityType="admin_cyfendrydbModel.Cours" Width="1.5" PointX="0.75" PointY="6.375" />
+        <EntityTypeShape EntityType="admin_cyfendrydbModel.Subscription" Width="1.5" PointX="5.25" PointY="5" />
+        <EntityTypeShape EntityType="admin_cyfendrydbModel.UserCours" Width="1.5" PointX="3" PointY="6.875" />
+        <EntityTypeShape EntityType="admin_cyfendrydbModel.UserPaymentMethod" Width="1.5" PointX="3" PointY="3.125" />
+        <EntityTypeShape EntityType="admin_cyfendrydbModel.UserRole" Width="1.5" PointX="1.5" PointY="10.875" />
+        <EntityTypeShape EntityType="admin_cyfendrydbModel.User" Width="1.5" PointX="0.75" PointY="0.75" />
+        <AssociationConnector Association="admin_cyfendrydbModel.FK_UserCourses_Courses" />
+        <AssociationConnector Association="admin_cyfendrydbModel.FK_Subscriptions_UserCourses" />
+        <AssociationConnector Association="admin_cyfendrydbModel.FK_UserCourses_Users" />
+        <AssociationConnector Association="admin_cyfendrydbModel.FK_UserPaymentMethods_Users" />
+        <AssociationConnector Association="admin_cyfendrydbModel.FK_Users_UserRoles" />
+        <EntityTypeShape EntityType="admin_cyfendrydbModel.CoursePlan" Width="1.5" PointX="3" PointY="13.875" />
+        <AssociationConnector Association="admin_cyfendrydbModel.FK_CoursePlans_Courses" />
+        <EntityTypeShape EntityType="admin_cyfendrydbModel.UserCourseSignature" Width="1.5" PointX="5.25" PointY="12.125" />
+        <AssociationConnector Association="admin_cyfendrydbModel.FK_UserCourseSignatures_UserCourses" />
+        <EntityTypeShape EntityType="admin_cyfendrydbModel.Payment" Width="1.5" PointX="8.25" PointY="9.875" />
+        <AssociationConnector Association="admin_cyfendrydbModel.FK_Payments_Payments" />
+        <AssociationConnector Association="admin_cyfendrydbModel.FK_Payments_UserCourses" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

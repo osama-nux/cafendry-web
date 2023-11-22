@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyfendry Academy</title>
+    <link href="https://fonts.cdnfonts.com/css/pp-neue-montreal" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="~/Assets/Website/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Assets/Website/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    @Styles.Render("~/Content/css")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+</head>
+<body>
+    <div class="container-fluid">
+
+        <div class=" container-xl mainnav">
+            <nav class="navbar navbar-expand-lg bg-white">
+                <div class="container-fluid">
+                    <a class="navbar-brand d-lg-none" href="home.html">
+                        <img src="~/Assets/Website/Images/Logo.png" alt="Bootstrap" class="img-fluid headerlogo" />
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between " id="navbarSupportedContent">
+                        <a class="navbar-brand d-lg-block d-none " href="home.html">
+                            <img src="~/Assets/Website/Images/Logo.png" alt="Bootstrap" class="img-fluid headerlogo" />
+                        </a>
+                        <ul class="navbar-nav mx-0 text-center mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            </li>
+                            <li class="nav-item mx-2">
+                                <a class="nav-link" href="/Home/About">About</a>
+                            </li>
+                            <li class="nav-item mx-2">
+                                <a class="nav-link" href="/Home/Courses">Courses</a>
+                            </li>
+                            <li class="nav-item mx-2">
+                                <a class="nav-link" href="/Home/Coaching">Coaching</a>
+                            </li>
+                            <li class="nav-item dropdown mx-2">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    Resources
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="/Home/Blogs">Blogs</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/Home/Events">Events</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/Home/Questions">Question</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="d-flex flex-lg-row flex-column align-items-center" role="search">
+                            <div class="d-flex mx-2 mt-2 mb-lg-0 mb-2">
+                                <i class="fa-solid fa-user me-2 mt-1"></i>
+                                <li class="nav-item lst-none">My Account</li>
+                            </div>
+                            <div class="mt-lg-0 mt-2">
+                                <a href="/Account/Register" class="btn primary primaryText ms-3 px-4 rounded-5 shadow-lg">
+                                    Join Today!
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        @RenderBody()
+
+        <footer class="text-center text-lg-start bg-white text-muted container-xl rounded-5 mt-5 py-1  footer">
+            <section class="">
+                <div class="container text-center text-md-start mt-5 pt-3">
+                    <div class="row mt-3">
+                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                            <img src="~/Assets/Website/Images/Logo.png" class="img-fluid mb-3" />
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Felis
+                                pellentesque consectetur convallis vulputate.Lorem ipsum dolor
+                                sit amet, consectetur adipiscing elit. Felis pellentesque
+                                consectetur convallis vulputate.
+                            </p>
+                        </div>
+
+                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase  fw-bolder mb-4">Our Programs</h6>
+                            <p>Live IT Audit Bootcamp</p>
+                            <p>IT GRC Bootcamp</p>
+                            <p>Cloud Engineering Bootcamp</p>
+                            <p>GRC Analytics Engineer Bootcamp</p>
+                        </div>
+
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bolder mb-4">Useful links</h6>
+                            <p>
+                                <a href="/" class="text-reset">Home</a>
+                            </p>
+                            <p>
+                                <a href="/Home/About" class="text-reset">About Us </a>
+                            </p>
+                            <p>
+                                <a href="/Home/Courses" class="text-reset">Courses</a>
+                            </p>
+                            <p>
+                                <a href="/Home/Coaching" class="text-reset">Coaching</a>
+                            </p>
+                            <p>
+                                <a href="/Home/Questions" class="text-reset">Resources</a>
+                            </p>
+                        </div>
+                        <!-- Grid column -->
+                        <!-- Grid column -->
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                            <h6 class="text-uppercase fw-bolder mb-4">Hot Courses</h6>
+                            <p>Live IT Audit Bootcamp</p>
+                            <p>IT GRC Bootcamp</p>
+                            <p>Cloud Engineering Bootcamp</p>
+                            <p>GRC Analytics Engineer Bootcamp</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="d-flex justify-content-center align-items-center justify-content-lg-between pt-4 px-4  border-bottom ">
+                <div class="me-5  d-none d-lg-block">
+                    <strong class="fw-bolder">
+                        <p>Newsletter</p>
+                    </strong>
+                    <p>
+                        Be the first to know about new deals<br />
+                        and courses, featured
+                    </p>
+                    <form class="d-flex footer-form" role="search">
+                        <input class="form-control rounded-5" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn primary rounded-5 text-light px-3 send-btn " type="submit"><i class="bi bi-send"></i></button>
+                    </form>
+                </div>
+
+                <div class="footer-links-con">
+                    <a href="" class="m-1 rounded-circle text-center">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="" class="m-1 rounded-circle text-center">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+
+                    <a href="" class="m-1 rounded-circle text-center">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="" class="m-1 rounded-circle text-center">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+
+            </section>
+            <div class="text-center fw-bold opacity-75 align-self-center py-3">
+                Copyright © 2023 Cyfendry Academy
+            </div>
+
+        </footer>
+
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/bootstrap")*@
+    <script src="~/Assets/Website/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/9716d80b93.js" crossorigin="anonymous"></script>
+    @RenderSection("scripts", required: false)
+
+    <script>
+        var swiper = new Swiper(".slide-content", {
+            slidesPerView: 3,
+            spaceBetween: 2,
+            loop: true,
+            centerSlide: "true",
+            fade: "true",
+            grabCursor: "true",
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+                dynamicBullets: false,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            breakpoints: {
+                0: {
+                    slidesPerView: 1,
+                },
+                520: {
+                    slidesPerView: 2,
+                },
+                950: {
+                    slidesPerView: 3,
+                },
+            },
+        });
+        var vid = document.getElementById('video')
+        var playic = document.getElementById('playic')
+
+        if (playic)
+        playic.addEventListener("click", () => {
+            // vid.toggleAttribute('autoplay')
+            // vid.play()
+            if (vid.paused) {
+                vid.play();
+            }
+            else {
+                vid.pause();
+            }
+        });
+    </script>
+</body>
+</html>
